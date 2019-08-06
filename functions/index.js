@@ -8,26 +8,23 @@ const functions = require('firebase-functions');
 // Node util module used for creating dynamic strings
 const util = require('util');
 
-//Prompts
-const prompts= require('./prompts').prompts;
-const suggestions= require('./prompts').suggestions;
-
+const utils = require('./utils');
 
 // Import the Dialogflow module and response creation dependencies
 // from the Actions on Google client library.
 const {
   dialogflow,
-  BasicCard,
-  Permission,
+  //  BasicCard,
+  //  Permission,
   Suggestions,
-  Carousel,
-  Image,
+  //  Carousel,
+  //  Image,
 } = require('actions-on-google');
 
 // Instantiate the Dialogflow client.
-const app = dialogflow({debug: true});
+const app = dialogflow({ debug: true });
 
-const getCharacterListByChoosedPrompt = (promptIndex) => {
+const getCharacterListByChoosedPrompt = () => {
   return "cowboy, orsetto di peluche ed un cavaliere";
 }
 
@@ -35,19 +32,37 @@ const getCharacterListByChoosedPrompt = (promptIndex) => {
 
 const ask = (conv, label) => {
   let index = 0;
-  const prompt = utils.getRandomPrompt(conv, label, index)
-
-  if(conv.data.character !== undefined && label === 'start'){
-    conv.data.story = 'story'+(index+1);
-  }
+  let params = [];
+  let sugs = [];
+  let randomPrompt = utils.getRandomPrompt(conv, label, index, params, sugs)
   
+  index = randomPrompt.index;
+  params = randomPrompt.params;
+  sugs = randomPrompt.sugs;
+  let prompt = randomPrompt.prompt;
+  //Set choosed story
+  if (conv.data.character !== undefined && label === 'start') {
+    conv.data.story = 'story' + (index + 1);
+  }
+
+  // If there are params to pass execute util.format
+  if (params) {
+    let paramsArray = [];
+    paramsArray.push(prompt);
+
+    params.forEach(p => {
+      paramsArray.push(conv.data.params[p])
+    });
+
+    prompt = util.format.apply(util, [prompt, paramsArray]);
+  }
   conv.data.lastPrompt = prompt;
   conv.ask(`<speak>${prompt}</speak>`);
- 
-  
-  if(suggestions[label] && suggestions[label][index]){
-    conv.data.lastSuggestions = new Suggestions(suggestions[label][index]);
-    conv.ask(conv.data.lastSuggestions);  
+
+
+  if (sugs) {
+    conv.data.lastSuggestions = new Suggestions(sugs);
+    conv.ask(conv.data.lastSuggestions);
   } else {
     conv.data.lastSuggestions = undefined;
   }
@@ -55,208 +70,205 @@ const ask = (conv, label) => {
 
 const repeat = (conv) => {
   conv.ask(`<speak>${conv.data.lastPrompt}</speak>`);
-  if (conv.data.lastSuggestions){
+  if (conv.data.lastSuggestions) {
     conv.ask(conv.data.lastSuggestions);
   }
 }
 
 // Handle the Dialogflow intent named 'Default Welcome Intent'.
 app.intent('Default Welcome Intent', (conv) => {
-  
+
   if (!conv.user.last.seen) {
     //first visit
-    const prompt = utils.getRandomPrompt(conv, 'welcome');
-    conv.ask(`<speak>${prompt}</speak>`, ); 
+    ask(conv, 'welcome')
   } else {
-    const prompt = utils.getRandomPrompt(conv, 'welcome_back');
-    conv.ask(`<speak>${prompt}</speak>`, );
+    ask(conv, 'welcome_back')
   }
-  conv.ask(new Suggestions('Si', 'No'));
 });
 
 app.intent('Start Game Intent', (conv) => {
   let index = 0;
-  const prompt = utils.getRandomPrompt(conv, 'choose_character', index);
   conv.data.characterList = getCharacterListByChoosedPrompt(index);
-  conv.ask(`<speak>${prompt}</speak>`);
-  conv.ask(new Suggestions('Cowboy', 'Orsetto di peluche', 'Cavaliere'));
+  conv.data.params = {};
+  conv.data.params['characterList'] = conv.data.characterList;
+  ask(conv, 'choose_character');
+
 });
 
-app.intent('Character Choose Intent', (conv, {character}) => {
+app.intent('Character Choose Intent', (conv, { character }) => {
   conv.data.character = character;
-  
-  const prompt = utils.getRandomPrompt(conv, 'character_name');
-  conv.ask(`<speak>${prompt}</speak>`);
+  conv.data.params['character'] = character;
+  ask(conv, 'character_name');
 });
 
-app.intent('Character Name Intent', (conv, {name}) => {
+app.intent('Character Name Intent', (conv, { name }) => {
   conv.data.characterName = name;
-  let index = 0;
+  conv.data.params['name'] = name;
   ask(conv, 'start');
 });
 
 // CODE REUSE FUNCTIONS FOR CHOOSE AND FINAL...
-const choose = (label) => {
+const choose = (conv, label) => {
   conv.data.choose = label;
   ask(conv, conv.data.story + '_' + label);
 }
 
-const final = (label) => {
+const final = (conv, label) => {
   conv.data.final = label;
   ask(conv, conv.data.story + '_' + conv.data.choose + '_' + label);
 }
 
 // COWBOY STORIES INTENT
 // STORY 1
-app.intent('Cowboy Story1 Choose1', (conv, {character}) => {
-  choose('choose1');
+app.intent('Cowboy Story1 Choose1', (conv) => {
+  choose(conv, 'choose1');
 });
 
-app.intent('Cowboy Story1 Choose2', (conv, {character}) => {
-  choose('choose2');
+app.intent('Cowboy Story1 Choose2', (conv) => {
+  choose(conv, 'choose2');
 });
 
-app.intent('Cowboy Story1 Choose1 Final1', (conv, {character}) => {
-  final('final1');
+app.intent('Cowboy Story1 Choose1 Final1', (conv) => {
+  final(conv, 'final1');
 });
 
-app.intent('Cowboy Story1 Choose1 Final2', (conv, {character}) => {
-  final('final2');
+app.intent('Cowboy Story1 Choose1 Final2', (conv) => {
+  final(conv, 'final2');
 });
 
-app.intent('Cowboy Story1 Choose2 Final1', (conv, {character}) => {
-  final('final1');
+app.intent('Cowboy Story1 Choose2 Final1', (conv) => {
+  final(conv, 'final1');
 });
 
-app.intent('Cowboy Story1 Choose2 Final2', (conv, {character}) => {
-  final('final2');
+app.intent('Cowboy Story1 Choose2 Final2', (conv) => {
+  final(conv, 'final2');
 });
 
 // STORY 2
-app.intent('Cowboy Story2 Choose1', (conv, {character}) => {
-  choose('choose1');
+app.intent('Cowboy Story2 Choose1', (conv) => {
+  choose(conv, 'choose1');
 });
 
-app.intent('Cowboy Story2 Choose2', (conv, {character}) => {
-  choose('choose2');
+app.intent('Cowboy Story2 Choose2', (conv) => {
+  choose(conv, 'choose2');
 });
 
-app.intent('Cowboy Story2 Choose1 Final1', (conv, {character}) => {
-  final('final1');
+app.intent('Cowboy Story2 Choose1 Final1', (conv) => {
+  final(conv, 'final1');
 });
 
-app.intent('Cowboy Story2 Choose1 Final2', (conv, {character}) => {
-  final('final2');
+app.intent('Cowboy Story2 Choose1 Final2', (conv) => {
+  final(conv, 'final2');
 });
 
-app.intent('Cowboy Story2 Choose2 Final1', (conv, {character}) => {
-  final('final1');
+app.intent('Cowboy Story2 Choose2 Final1', (conv) => {
+  final(conv, 'final1');
 });
 
-app.intent('Cowboy Story2 Choose2 Final2', (conv, {character}) => {
-  final('final2');
+app.intent('Cowboy Story2 Choose2 Final2', (conv) => {
+  final(conv, 'final2');
 });
 
 // PELUCHE BEAR STORIES INTENT
 // STORY 1
-app.intent('Peluche Story1 Choose1', (conv, {character}) => {
-  choose('choose1');
+app.intent('Peluche Story1 Choose1', (conv) => {
+  choose(conv, 'choose1');
 });
 
-app.intent('Peluche Story1 Choose2', (conv, {character}) => {
-  choose('choose2');
+app.intent('Peluche Story1 Choose2', (conv) => {
+  choose(conv, 'choose2');
 });
 
-app.intent('Peluche Story1 Choose1 Final1', (conv, {character}) => {
-  final('final1');
+app.intent('Peluche Story1 Choose1 Final1', (conv) => {
+  final(conv, 'final1');
 });
 
-app.intent('Peluche Story1 Choose1 Final2', (conv, {character}) => {
-  final('final2');
+app.intent('Peluche Story1 Choose1 Final2', (conv) => {
+  final(conv, 'final2');
 });
 
-app.intent('Peluche Story1 Choose2 Final1', (conv, {character}) => {
-  final('final1');
+app.intent('Peluche Story1 Choose2 Final1', (conv) => {
+  final(conv, 'final1');
 });
 
-app.intent('Peluche Story1 Choose2 Final2', (conv, {character}) => {
-  final('final2');
+app.intent('Peluche Story1 Choose2 Final2', (conv) => {
+  final(conv, 'final2');
 });
 
 // STORY 2
-app.intent('Peluche Story2 Choose1', (conv, {character}) => {
-  choose('choose1');
+app.intent('Peluche Story2 Choose1', (conv) => {
+  choose(conv, 'choose1');
 });
 
-app.intent('Peluche Story2 Choose2', (conv, {character}) => {
-  choose('choose2');
+app.intent('Peluche Story2 Choose2', (conv) => {
+  choose(conv, 'choose2');
 });
 
-app.intent('Peluche Story2 Choose1 Final1', (conv, {character}) => {
-  final('final1');
+app.intent('Peluche Story2 Choose1 Final1', (conv) => {
+  final(conv, 'final1');
 });
 
-app.intent('Peluche Story2 Choose1 Final2', (conv, {character}) => {
-  final('final2');
+app.intent('Peluche Story2 Choose1 Final2', (conv) => {
+  final(conv, 'final2');
 });
 
-app.intent('Peluche Story2 Choose2 Final1', (conv, {character}) => {
-  final('final1');
+app.intent('Peluche Story2 Choose2 Final1', (conv) => {
+  final(conv, 'final1');
 });
 
-app.intent('Peluche Story2 Choose2 Final2', (conv, {character}) => {
-  final('final2');
+app.intent('Peluche Story2 Choose2 Final2', (conv) => {
+  final(conv, 'final2');
 });
 
 // KNIGHT STORIES INTENT
 // STORY 1
-app.intent('Knight Story1 Choose1', (conv, {character}) => {
-  choose('choose1');
+app.intent('Knight Story1 Choose1', (conv) => {
+  choose(conv, 'choose1');
 });
 
-app.intent('Knight Story1 Choose2', (conv, {character}) => {
-  choose('choose2');
+app.intent('Knight Story1 Choose2', (conv) => {
+  choose(conv, 'choose2');
 });
 
-app.intent('Knight Story1 Choose1 Final1', (conv, {character}) => {
-  final('final1');
+app.intent('Knight Story1 Choose1 Final1', (conv) => {
+  final(conv, 'final1');
 });
 
-app.intent('Knight Story1 Choose1 Final2', (conv, {character}) => {
-  final('final2');
+app.intent('Knight Story1 Choose1 Final2', (conv) => {
+  final(conv, 'final2');
 });
 
-app.intent('Knight Story1 Choose2 Final1', (conv, {character}) => {
-  final('final1');
+app.intent('Knight Story1 Choose2 Final1', (conv) => {
+  final(conv, 'final1');
 });
 
-app.intent('Knight Story1 Choose2 Final2', (conv, {character}) => {
-  final('final2');
+app.intent('Knight Story1 Choose2 Final2', (conv) => {
+  final(conv, 'final2');
 });
 
 // STORY 2
-app.intent('Knight Story2 Choose1', (conv, {character}) => {
-  choose('choose1');
+app.intent('Knight Story2 Choose1', (conv) => {
+  choose(conv, 'choose1');
 });
 
-app.intent('Knight Story2 Choose2', (conv, {character}) => {
-  choose('choose2');
+app.intent('Knight Story2 Choose2', (conv) => {
+  choose(conv, 'choose2');
 });
 
-app.intent('Knight Story2 Choose1 Final1', (conv, {character}) => {
-  final('final1');
+app.intent('Knight Story2 Choose1 Final1', (conv) => {
+  final(conv, 'final1');
 });
 
-app.intent('Knight Story2 Choose1 Final2', (conv, {character}) => {
-  final('final2');
+app.intent('Knight Story2 Choose1 Final2', (conv) => {
+  final(conv, 'final2');
 });
 
-app.intent('Knight Story2 Choose2 Final1', (conv, {character}) => {
-  final('final1');
+app.intent('Knight Story2 Choose2 Final1', (conv) => {
+  final(conv, 'final1');
 });
 
-app.intent('Knight Story2 Choose2 Final2', (conv, {character}) => {
-  final('final2');
+app.intent('Knight Story2 Choose2 Final2', (conv) => {
+  final(conv, 'final2');
 });
 
 // Handle the Dialogflow REPEAT intent

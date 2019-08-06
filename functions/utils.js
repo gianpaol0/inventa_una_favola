@@ -22,27 +22,30 @@ const prompts = require('./prompts').prompts;
 module.exports = {
 
   // Utility to get a random item from an array.
-  getRandomItem: (array, index) => {
-    index = Math.floor(Math.random() * (array.length));
-    return array[index];
+  getRandomItem: (array) => {
+    const index = Math.floor(Math.random() * (array.length));
+    const returnObject = {};
+    
+    returnObject['index'] = index;
+    returnObject['prompt'] = array[index];
+    return returnObject;
   },
 
   // Utility to get a random prompt without sequential repeats.
-  getRandomPrompt: (conv, prompt, index) => {
-    
-    let prompts = prompts;
+  getRandomPrompt: (conv, prompt) => {
+    let functionPrompts = prompts;
 
     let userSession =  conv.user.storage.prompts;
 
     let character = conv.data.character;
     // logger.debug(`getRandomPrompt=${prompt}`);
     if ( character !== undefined) { 
-      prompts = prompts[character];
+      functionPrompts = functionPrompts[character];
       userSession = userSession[character];
     }
 
-    index = 0;
-    let availablePrompts = prompts[prompt];
+    let index = 0;
+    let availablePrompts = functionPrompts[prompt].prompts;
     // Select a new prompt by avoiding prompts used previously in the user sessions.
     if (userSession) {
       if (typeof (userSession[prompt]) !== 'undefined') {
@@ -55,18 +58,36 @@ module.exports = {
     if (Array.isArray(availablePrompts)) {
       // if no prompts reset the user sessions array...
       if (availablePrompts.length === 0) {
-        availablePrompts = prompts[prompt];
+        availablePrompts = functionPrompts[prompt].prompts;
         userSession[prompt] = {};
       }
       if (availablePrompts.length > 0) {
-        userSession[prompt] = module.exports.getRandomItem(availablePrompts, index);
+        let randomItem = module.exports.getRandomItem(availablePrompts);
+        userSession[prompt] = randomItem.prompt;
+        index = randomItem.index
       } else {
-        userSession[prompt] = prompts[prompt][0];
+        userSession[prompt] = functionPrompts[prompt].prompts[0];
       }
     } else {
       userSession[prompt] = availablePrompts;
     }
-    return userSession[prompt];
+
+    const returnObject = {};
+
+    returnObject['prompt'] = userSession[prompt];
+
+    returnObject['index'] = index;
+
+    if (functionPrompts[prompt].suggestions) {
+      returnObject['suggestions'] = functionPrompts[prompt].suggestions[index];
+    }
+
+    if (functionPrompts[prompt].params) {
+      returnObject['params'] = functionPrompts[prompt].params;
+    }
+
+
+    return returnObject;
   }
 
 };
