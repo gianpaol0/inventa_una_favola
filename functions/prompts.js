@@ -1,9 +1,9 @@
 // Copyright 2019, Gianpaolo Altamura
 
 //Imports prompts for each character
-const cowboy = require('./prompts_cowboy');
-const peluche = require('./prompts_peluche');
-const knight = require('./prompts_knight');
+const cowboy = require('./prompts_cowboy').prompts;
+const peluche = require('./prompts_peluche').prompts;
+const knight = require('./prompts_knight').prompts;
 
 // const SSML_BREAK_SHORT = '<break time="700ms"/>';
 
@@ -44,9 +44,9 @@ const prompts = {
       `Bene. Iniziamo. Scegli un personaggio per la nostra favola. Puoi scegliere tra un cowboy, un orsetto di peluche ed un cavaliere.`
     ],
     'suggestions': [
-      ['Cowboy', 'Orsetto di peluce', 'Cavaliere'],
-      ['Cowboy', 'Orsetto di peluce', 'Cavaliere'],
-      ['Cowboy', 'Orsetto di peluce', 'Cavaliere']
+      ['Cowboy', 'Orsetto di peluche', 'Cavaliere'],
+      ['Cowboy', 'Orsetto di peluche', 'Cavaliere'],
+      ['Cowboy', 'Orsetto di peluche', 'Cavaliere']
     ]
   },
   'choose_character_error': {
@@ -56,8 +56,8 @@ const prompts = {
     ],
     'params': ['characterList'],
     'suggestions': [
-      ['Cowboy', 'Orsetto di peluce', 'Cavaliere'],
-      ['Cowboy', 'Orsetto di peluce', 'Cavaliere'],
+      ['Cowboy', 'Orsetto di peluche', 'Cavaliere'],
+      ['Cowboy', 'Orsetto di peluche', 'Cavaliere'],
     ]
   },
   'character_name': {
@@ -77,9 +77,6 @@ const prompts = {
       ['Lucia', 'Stefania', 'Matteo']
     ]
   },
-  'cowboy': cowboy.prompts,
-  'peluche': peluche.prompts,
-  'knight': knight.prompts,
   'story_final': {
     'prompts': [
       `E vissero tutti felici e contenti. La nostra storia è finita, torna a trovarci perchè aggiungeremo sempre nuove avventure`,
@@ -88,5 +85,10 @@ const prompts = {
     ]
   }
 };
+
+prompts['cowboy'] = cowboy;
+prompts['peluche'] = peluche;
+prompts['knight'] = knight;
+  
 
 exports.prompts = prompts;

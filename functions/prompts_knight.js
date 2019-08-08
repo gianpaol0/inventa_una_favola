@@ -8,7 +8,7 @@ const prompts = {
   'start': {
     'prompts': [
       `C'era una volta un prode cavaliere di nome %s. Due grandi minacce incombevano sul regno dei cavalieri, un terribile drago sputafuoco che bruciava i villaggi ed una malvagia strega che tramutava tutti gli abitanti del regno in statue. Quale delle due avventure avrebbe dovuto scegliere? Il drago o la strega?`,
-      `Un giorno. Un cavaliere di nome %s era alla ricerca di una miniera d'oro che era infestata dai fantasmi. Riuscì a trovare la miniera ma si accorse che c'era due strade all'interno della miniera. Dove andare? A destra o a sinistra? Aiutalo dicendogli dove andare`,
+      `Un giorno. Un cavaliere di nome %s che andava alla miniera d'oro di Valmot. La miniera si dicesse che fosse infestata dai fantasmi. Giunto alla miniera, il cavaliere si accorse che c'erano due strade all'interno della miniera. Dove andare? A destra o a sinistra? Aiutalo dicendogli dove andare`,
     ],
     'params': ['name'],
     'suggestions': [
@@ -102,6 +102,4 @@ const prompts = {
   },
 };
 
-
-
-exports.knight = prompts;
+exports.prompts = prompts;

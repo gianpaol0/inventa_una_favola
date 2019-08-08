@@ -7,18 +7,18 @@
 const prompts = {
   'start': {
     'prompts': [
-      `Era un pomeriggio torrido ed il cowboy %s si aggirava per le strade di Far City, quando vide lo sceriffo in pericolo. Cosa fare? Aiutare lo sceriffo o continuare per la propria strada?`,
+      `Era un pomeriggio torrido ed il cowboy %s si aggirava per le strade di Far City, quando vide lo sceriffo in pericolo. Cosa fare? Aiutare lo sceriffo o continuare?`,
       `C'era una volta il cowboy %s. Quel giorno %s aveva voglia di una nuova avventura. Dove posso iniziare la mia avventura? Mi aiuteresti? Vado all'accampamento degli indiani o alla città fantasma?`,
     ],
     'params': ['name'],
     'suggestions': [
-      ['Aiutare lo sceriffo', 'Continuare per la propria strada'],
-      ['Accampamento degli indiani', 'Città fantasma'],
+      ['Aiutare lo sceriffo', 'Continuare la strada'],
+      ['Accampamento Indiani', 'Città fantasma'],
     ]
   },
   'story1_choose1': {
     'prompts': [
-      `Lo sceriffo era stato attaccato dai tre terribili banditi Dalton. %s decise di aiutare lo sceriffo ma non sapeva come. "Aiutami"."Devo attirare la loro attenzione o avvinarmi furtivamente?"`
+      `Lo sceriffo era stato attaccato dai tre terribili banditi Dalton. %s decise di aiutare lo sceriffo ma non sapeva come. "Aiutami"."Devo attirare la loro attenzione o avvicinarmi furtivamente?"`
     ],
     'params': ['name'],
     'suggestions': [
@@ -102,5 +102,4 @@ const prompts = {
   }
 };
 
-
-exports.cowboy = prompts;
+exports.prompts = prompts;

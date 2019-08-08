@@ -19,13 +19,21 @@
 // Load all the user prompts.
 const prompts = require('./prompts').prompts;
 
-module.exports = {
+const character = {
+  'cowboy': 'cowboy',
+  'orsetto di peluche': 'peluche',
+  'cavaliere': 'knight'
+};
 
+module.exports = {
+  characterEntityToCharacter: (characterEntity) => {
+    return character[characterEntity];
+  },
   // Utility to get a random item from an array.
   getRandomItem: (array) => {
     const index = Math.floor(Math.random() * (array.length));
     const returnObject = {};
-    
+
     returnObject['index'] = index;
     returnObject['prompt'] = array[index];
     return returnObject;
@@ -35,16 +43,24 @@ module.exports = {
   getRandomPrompt: (conv, prompt) => {
     let functionPrompts = prompts;
 
-    let userSession =  conv.user.storage.prompts;
-
+    if(conv.user.storage.prompts === undefined){
+      conv.user.storage.prompts = {};
+    }
+    let userSession = conv.user.storage.prompts;
+    
     let character = conv.data.character;
+    
     // logger.debug(`getRandomPrompt=${prompt}`);
-    if ( character !== undefined) { 
+    if (character !== undefined) {
       functionPrompts = functionPrompts[character];
-      userSession = userSession[character];
+      if(conv.user.storage.prompts[character] === undefined){
+        conv.user.storage.prompts[character] = {};
+      }
+      userSession = conv.user.storage.prompts[character];
     }
 
     let index = 0;
+
     let availablePrompts = functionPrompts[prompt].prompts;
     // Select a new prompt by avoiding prompts used previously in the user sessions.
     if (userSession) {
@@ -52,7 +68,7 @@ module.exports = {
         availablePrompts = availablePrompts.filter((word) => word !== userSession[prompt]);
       }
     } else {
-      userSession = {};
+      conv.user.storage.prompts = {};
     }
     // Persist the selected prompt in user sessions storage.
     if (Array.isArray(availablePrompts)) {

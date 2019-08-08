@@ -28,17 +28,15 @@ const getCharacterListByChoosedPrompt = () => {
   return "cowboy, orsetto di peluche ed un cavaliere";
 }
 
-
-
 const ask = (conv, label) => {
   let index = 0;
   let params = [];
-  let sugs = [];
-  let randomPrompt = utils.getRandomPrompt(conv, label, index, params, sugs)
+  let suggestions = [];
+  let randomPrompt = utils.getRandomPrompt(conv, label, index)
   
   index = randomPrompt.index;
   params = randomPrompt.params;
-  sugs = randomPrompt.sugs;
+  suggestions = randomPrompt.suggestions;
   let prompt = randomPrompt.prompt;
   //Set choosed story
   if (conv.data.character !== undefined && label === 'start') {
@@ -54,14 +52,14 @@ const ask = (conv, label) => {
       paramsArray.push(conv.data.params[p])
     });
 
-    prompt = util.format.apply(util, [prompt, paramsArray]);
+    prompt = util.format.apply(util, paramsArray);
   }
   conv.data.lastPrompt = prompt;
   conv.ask(`<speak>${prompt}</speak>`);
 
 
-  if (sugs) {
-    conv.data.lastSuggestions = new Suggestions(sugs);
+  if (suggestions) {
+    conv.data.lastSuggestions = new Suggestions(suggestions);
     conv.ask(conv.data.lastSuggestions);
   } else {
     conv.data.lastSuggestions = undefined;
@@ -96,9 +94,10 @@ app.intent('Start Game Intent', (conv) => {
 });
 
 app.intent('Character Choose Intent', (conv, { character }) => {
-  conv.data.character = character;
+  let characterValue = utils.characterEntityToCharacter(character);
   conv.data.params['character'] = character;
   ask(conv, 'character_name');
+  conv.data.character = characterValue;
 });
 
 app.intent('Character Name Intent', (conv, { name }) => {

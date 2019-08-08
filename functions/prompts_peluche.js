@@ -8,9 +8,9 @@ const prompts = {
   'start': {
     'prompts': [
       `C'era una volta un orsetto peluche di nome %s. %s viveva insieme ad una famiglia di umani ed il suo migliore amico era un bambino di nome Marco. Un giorno Marco invitò a casa un amico di nome Giovanni. Giovanni di nascosto rubò un aereo giocattolo di Marco. Che doveva fare l'orsetto? Dirlo a Marco o dirlo direttamente a Giovanni?`,
-      `Nel villaggio dei peluche erano sempre tutti felici finchè un giorno il sole sparì. Con il tempo senza sole, anche la felicità sparì dal villaggio dei peluche. L'orsetto %s, che era un peluche molto coraggioso, decise di indagare. Scoprì che il sole era stato rubato da un gigante. Che fare? Affrontare il gigante o dirlo al capo del villaggio?`,
+      `Nel villaggio dei peluche erano sempre tutti felici finchè un giorno il sole sparì. Con il tempo senza sole, anche la felicità sparì dal villaggio dei peluche. L'orsetto %s, che era un peluche molto coraggioso, decise di indagare. Scoprì che il sole era stato rubato da un gigante. Che doveva fare %s? Affrontare il gigante o dirlo al capo del villaggio?`,
     ],
-    'params': ['name'],
+    'params': ['name', 'name'],
     'suggestions': [
       ['Dirlo a Marco', 'Dirlo a Giovanni'],
       ['Affrontare il gigante', 'Dirlo al capo del villaggio']
@@ -100,4 +100,4 @@ const prompts = {
   },
 };
 
-exports.peluche = prompts;
+exports.prompts = prompts;
