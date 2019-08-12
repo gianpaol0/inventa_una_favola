@@ -32,8 +32,6 @@ module.exports = {
   // Utility to get a random item from an array.
   getRandomItem: (array) => {
     
-    const returnObject = {};
-
     return  array[Math.floor(Math.random() * (array.length))];
   },
 
