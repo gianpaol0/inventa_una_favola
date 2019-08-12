@@ -31,12 +31,10 @@ module.exports = {
   },
   // Utility to get a random item from an array.
   getRandomItem: (array) => {
-    const index = Math.floor(Math.random() * (array.length));
+    
     const returnObject = {};
 
-    returnObject['index'] = index;
-    returnObject['prompt'] = array[index];
-    return returnObject;
+    return  array[Math.floor(Math.random() * (array.length))];
   },
 
   // Utility to get a random prompt without sequential repeats.
@@ -79,8 +77,8 @@ module.exports = {
       }
       if (availablePrompts.length > 0) {
         let randomItem = module.exports.getRandomItem(availablePrompts);
-        userSession[prompt] = randomItem.prompt;
-        index = randomItem.index
+        userSession[prompt] = randomItem;
+        index = functionPrompts[prompt].prompts.indexOf(randomItem);
       } else {
         userSession[prompt] = functionPrompts[prompt].prompts[0];
       }

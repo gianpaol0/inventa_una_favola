@@ -8,40 +8,40 @@ const prompts = {
   'start': {
     'prompts': [
       `C'era una volta un orsetto peluche di nome %s. %s viveva insieme ad una famiglia di umani ed il suo migliore amico era un bambino di nome Marco. Un giorno Marco invitò a casa un amico di nome Giovanni. Giovanni di nascosto rubò un aereo giocattolo di Marco. Che doveva fare l'orsetto? Dirlo a Marco o dirlo direttamente a Giovanni?`,
-      `Nel villaggio dei peluche erano sempre tutti felici finchè un giorno il sole sparì. Con il tempo senza sole, anche la felicità sparì dal villaggio dei peluche. L'orsetto %s, che era un peluche molto coraggioso, decise di indagare. Scoprì che il sole era stato rubato da un gigante. Che doveva fare %s? Affrontare il gigante o dirlo al capo del villaggio?`,
+      `Nel villaggio dei peluche erano sempre tutti felici finchè un giorno il sole sparì. Con il tempo senza sole, anche la felicità sparì dal villaggio dei peluche. L'orsetto %s, che era un peluche molto coraggioso, decise di indagare. Scoprì che il sole era stato rubato da un gigante. Che doveva fare %s? Affrontare il gigante o andare  dal capo del villaggio?`,
     ],
     'params': ['name', 'name'],
     'suggestions': [
       ['Dirlo a Marco', 'Dirlo a Giovanni'],
-      ['Affrontare il gigante', 'Dirlo al capo del villaggio']
+      ['Affrontare il gigante', 'Andare dal capo villaggio']
     ]
   },
   'story1_choose1': {
     'prompts': [
-      `%s decise che lo avrebbe detto a Marco. Lo prese in disparte e gli disse. "Guarda che il tuo amico Giovanni ha rubato il tuo aereo giocattolo". Marco si arrabbiò molto con Giovanni e decise di non vederlo mai più.  All'orsetto dispiacque molto. "Devo trovare un modo per risolvere i loro problemi. Mi aiuteresti? Devo parlare con Marco o con Giovanni?"`
+      `%s decise che lo avrebbe detto a Marco. Lo prese in disparte e gli disse. "Guarda che il tuo amico Giovanni ha rubato il tuo aereo giocattolo". Marco si arrabbiò molto con Giovanni e decise di non vederlo mai più.  All'orsetto dispiacque molto. "Devo trovare un modo per risolvere i loro problemi. Che poteva fare? Farli incontrare con una scusa o incolparsi del furto?"`
     ],
     'params': ['name'],
     'suggestions': [
-      ['Parlare con Marco', 'Parlare con Giovanni']
+      ['Farli incontrare', 'Incolparsi del furto']
     ],
   },
   'story1_choose2': {
     'prompts': [
-      `Il nostro orsetto %s con una scusa portò Giovanni in un'altra stanza e gli disse "Senti Giovanni ho visto che hai rubato un aereo al mio migliore amico. Devi restituirglielo." Giovanni negò di averlo rubato. Che fare? Continuare a parlargli o frugargli le tasche?`
+      `Il nostro orsetto %s con una scusa portò Giovanni in un'altra stanza e gli disse "Senti Giovanni ho visto che hai rubato un aereo al mio migliore amico. Devi restituirglielo." Giovanni negò di averlo rubato. Che fare? Insistere o frugargli le tasche?`
     ],
     'params': ['name'],
     'suggestions': [
-      ['Parlare', 'Frugare le tasche']
+      ['Insistere', 'Frugare le tasche']
     ],
   },
   'story1_choose1_final1': {
     'prompts': [
-      `L'orsetto caparbiamente decise di parlarne con il suo amico Marco. "Marco" gli disse "deve subito riappacificarti con Giovanni". "E perchè mai?" gli rispose Marco. "Perchè tutti hanno bisogno di una seconda possibilità" affermò allora %s. "Sono convinto che Giovanni è molto rammaricato e ti chiederà scusa". Marco accolse la richiesta del suo amico peluche e fece pace con l'amico. Da quel giorno Marco e Giovanni divennero ancora più amici e non litigarono mai più. `
+      `L'orsetto caparbiamente decise di rifare incontrare i due amici. Appena si rividero Giovanni subito chiese scusa a Marco del suo comportamento. Marco e Giovanni fecero pace e da quel giorno non litigarono mai più. `
     ]
   },
   'story1_choose1_final2': {
     'prompts': [
-      `%s con coraggio andò a trovare a Giovanni e gli disse: "Tu e Marco dovete fare pace. Penso sia venuto il momento che tu gli chieda scusa". Giovanni che era molto dispiaciuto per quanto accaduto, decise di fare come suggerito da %s. Chiamò Marco e fecero subito pace. E da quel giorno furono inseparabili come tutti i buoni amici.`
+      `%s con coraggio si incolpò del furto dicendo che lo aveva fatto per gelosia. A quel punto Giovanni, pentito, rivelò la verità all'amico e gli chiese scusa. I due capirono che %s si era incolpato solo per portarli a fare pace, e lo ringraziarono e decisero di riappacificarsi. E da quel giorno furono inseparabili come tutti i buoni amici.`
     ],
     'params': ['name', 'name'],
   },
@@ -68,11 +68,11 @@ const prompts = {
   },
   'story2_choose2': {
     'prompts': [
-      `%s andò subito dal capo del villaggio a riferirgli quanto aveva scoperto. Il capo organizzò una spedizione per andare dal gigante e mise a capo della spedizione il nostro peluche. %s doveva decidere se andare dal gigante armati o con dei doni. Lo aiuteresti?`
+      `%s andò subito dal capo del villaggio a riferirgli quanto aveva scoperto. Il capo organizzò una spedizione per andare dal gigante e mise a capo della spedizione il nostro peluche. %s doveva decidere se usare le armi o usare l'astuzia. Lo aiuteresti?`
     ],
     'params': ['name', 'name'],
     'suggestions': [
-      ["Andare con le armi", "Andare con i doni"]
+      ["Usare le armi", "Usare l'astuzia"]
     ],
   },
   'story2_choose1_final1': {
