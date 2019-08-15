@@ -79,9 +79,9 @@ const prompts = {
   },
   'story_final': {
     'prompts': [
-      `E vissero tutti felici e contenti. La nostra storia è finita, torna a trovarci perchè aggiungeremo sempre nuove avventure`,
+      `La nostra storia è finita. Torna a trovarci perchè aggiungeremo sempre nuove avventure`,
       `Anche questa avventura è giunta alla fine. Ti aspettiamo ancora per creare insieme nuove favole`,
-      `Tutto bene quel che finisce bene. La nostra storia finisce qua, ma nuove storie ti aspettano. Torna a giocare quando vuoi.`
+      `Tutto bene quel che finisce bene. La favola finisce qua, ma nuove storie ti aspettano. Torna a giocare quando vuoi.`
     ]
   }
 };

@@ -29,6 +29,15 @@ module.exports = {
   characterEntityToCharacter: (characterEntity) => {
     return character[characterEntity];
   },
+
+  userPromptsIndexArrayToUserPromptsArray: (userArray, promptsArray) => {
+    let returnArray = [];
+    userArray.forEach(element => {
+      returnArray.push(promptsArray[element]);
+    });
+
+    return returnArray;
+  },
   // Utility to get a random item from an array.
   getRandomItem: (array) => {
     
@@ -47,7 +56,7 @@ module.exports = {
     let character = conv.data.character;
     
     // logger.debug(`getRandomPrompt=${prompt}`);
-    if (character !== undefined) {
+    if (character !== undefined && prompt !== 'story_final') {
       functionPrompts = functionPrompts[character];
       if(conv.user.storage.prompts[character] === undefined){
         conv.user.storage.prompts[character] = {};
@@ -56,12 +65,15 @@ module.exports = {
     }
 
     let index = 0;
+    let promptChoosed = '';
 
     let availablePrompts = functionPrompts[prompt].prompts;
     // Select a new prompt by avoiding prompts used previously in the user sessions.
     if (userSession) {
-      if (typeof (userSession[prompt]) !== 'undefined') {
-        availablePrompts = availablePrompts.filter((word) => word !== userSession[prompt]);
+      if (userSession[prompt]) {
+        const userPromptsArray = module.exports.userPromptsIndexArrayToUserPromptsArray(userSession[prompt], availablePrompts);
+        availablePrompts = availablePrompts.filter((word) => userPromptsArray.indexOf(word) < 0);
+        console.log(availablePrompts);
       }
     } else {
       conv.user.storage.prompts = {};
@@ -71,24 +83,30 @@ module.exports = {
       // if no prompts reset the user sessions array...
       if (availablePrompts.length === 0) {
         availablePrompts = functionPrompts[prompt].prompts;
-        userSession[prompt] = {};
+        userSession[prompt] = [];
       }
       if (availablePrompts.length > 0) {
-        let randomItem = module.exports.getRandomItem(availablePrompts);
-        userSession[prompt] = randomItem;
-        index = functionPrompts[prompt].prompts.indexOf(randomItem);
-      } else {
-        userSession[prompt] = functionPrompts[prompt].prompts[0];
+        promptChoosed = module.exports.getRandomItem(availablePrompts);
+        index = functionPrompts[prompt].prompts.indexOf(promptChoosed);
+        if (userSession[prompt]) {
+          userSession[prompt].push(index);
+        } else {
+          userSession[prompt] = [index];
+        }
       }
-    } else {
-      userSession[prompt] = availablePrompts;
-    }
+    } 
 
     const returnObject = {};
 
-    returnObject['prompt'] = userSession[prompt];
+    returnObject['prompt'] = functionPrompts[prompt].prompts[index];
 
     returnObject['index'] = index;
+
+    returnObject['finalConversation'] = false;
+
+    if(functionPrompts[prompt].finalConversation) {
+      returnObject['finalConversation'] = true;
+    }
 
     if (functionPrompts[prompt].suggestions) {
       returnObject['suggestions'] = functionPrompts[prompt].suggestions[index];

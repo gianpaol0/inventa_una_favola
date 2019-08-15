@@ -29,14 +29,14 @@ const getCharacterListByChoosedPrompt = () => {
 }
 
 const ask = (conv, label) => {
+  
   let index = 0;
-  let params = [];
-  let suggestions = [];
-  let randomPrompt = utils.getRandomPrompt(conv, label, index)
+  const randomPrompt = utils.getRandomPrompt(conv, label)
   
   index = randomPrompt.index;
-  params = randomPrompt.params;
-  suggestions = randomPrompt.suggestions;
+  const params = randomPrompt.params;
+  const suggestions = randomPrompt.suggestions;
+  const finalConversation = randomPrompt.finalConversation;
   let prompt = randomPrompt.prompt;
   //Set choosed story
   if (conv.data.character !== undefined && label === 'start') {
@@ -64,6 +64,12 @@ const ask = (conv, label) => {
   } else {
     conv.data.lastSuggestions = undefined;
   }
+
+  if (finalConversation) {
+    const finalPrompt = utils.getRandomPrompt(conv, 'story_final')
+    conv.close(`<speak>${finalPrompt.prompt}</speak>`);
+  }
+
 }
 
 const repeat = (conv) => {
@@ -75,6 +81,10 @@ const repeat = (conv) => {
 
 // Handle the Dialogflow intent named 'Default Welcome Intent'.
 app.intent('Default Welcome Intent', (conv) => {
+
+  conv.data.story = undefined;
+  conv.data.choose = undefined;
+  conv.data.final = undefined;
 
   if (!conv.user.last.seen) {
     //first visit
@@ -88,6 +98,7 @@ app.intent('Start Game Intent', (conv) => {
   let index = 0;
   conv.data.characterList = getCharacterListByChoosedPrompt(index);
   conv.data.params = {};
+  
   conv.data.params['characterList'] = conv.data.characterList;
   ask(conv, 'choose_character');
 
