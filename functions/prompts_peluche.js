@@ -81,7 +81,7 @@ const prompts = {
   },
   'story2_choose1_final1': {
     'prompts': [
-      `Il nostro orsetto senza alcun timore con un grosso martello bussò alla porta dei giganti. "Chi è?" rispose la sentinella gigante. "Sono %s" rispose l'orsetto. La sentinella visto che il peluche era davvero molto piccolo sentiva la voce ma non riusciva a vedere %s. Subito al nostro eroe venne una grande idea. "Non riesci a vedermi perchè sono un fantasma. Se non riportate indietro il sole al villaggio dei peluche verrò ogni notte a svegliarvi e spaventarvi." disse furbamente %s. A quel punto i giganti molto impauriti andarono di corsa a riportare il sole al villaggio dei giganti. L'orsetto %s fu premiato con una medaglia per il suo coraggio.`
+      `Il nostro orsetto senza alcun timore con un grosso martello bussò alla porta dei giganti. "Chi è?" rispose la sentinella gigante. "Sono %s" rispose l'orsetto. La sentinella visto che il peluche era davvero molto piccolo sentiva la voce ma non riusciva a vedere %s. Subito al nostro eroe venne una grande idea. "Non riesci a vedermi perchè sono un fantasma. Se non riportate indietro il sole al villaggio dei peluche verrò ogni notte a svegliarvi e spaventarvi." disse furbamente %s. A quel punto i giganti molto impauriti andarono di corsa a riportare il sole al villaggio dei peluche. L'orsetto %s fu premiato con una medaglia per il suo coraggio.`
     ],
     'params': ['name', 'name', 'name', 'name'],
     'finalConversation':true

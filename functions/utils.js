@@ -73,7 +73,6 @@ module.exports = {
       if (userSession[prompt]) {
         const userPromptsArray = module.exports.userPromptsIndexArrayToUserPromptsArray(userSession[prompt], availablePrompts);
         availablePrompts = availablePrompts.filter((word) => userPromptsArray.indexOf(word) < 0);
-        console.log(availablePrompts);
       }
     } else {
       conv.user.storage.prompts = {};
