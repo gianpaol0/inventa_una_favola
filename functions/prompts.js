@@ -62,10 +62,10 @@ const prompts = {
   },
   'character_name': {
     'prompts': [
-      `Bene hai scelto un %s, che nome vuoi dare al tuo personaggio?`,
-      `%s. Ottima scelta. Bene, è il momento di dare un nome al nostro personaggio. Scegli un nome.`,
+      `Bene hai scelto un %s, che nome vuoi dare al tuo personaggio? Scegli tra %s`,
+      `%s. Ottima scelta. Bene, è il momento di dare un nome al nostro personaggio. Scegli un nome tra %s`,
     ],
-    'params': ['character']
+    'params': ['character', 'namesList']
   },
   'character_name_error': {
     'prompts': [

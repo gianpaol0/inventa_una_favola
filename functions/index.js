@@ -98,8 +98,9 @@ app.intent('Start Game Intent', (conv) => {
   let index = 0;
   conv.data.characterList = getCharacterListByChoosedPrompt(index);
   conv.data.params = {};
-  
   conv.data.params['characterList'] = conv.data.characterList;
+  conv.data.params['namesList'] = utils.getNamesSentence();
+  
   ask(conv, 'choose_character');
 
 });

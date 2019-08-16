@@ -25,11 +25,44 @@ const character = {
   'cavaliere': 'knight'
 };
 
+const maleNames = ['Gianpaolo',
+  'Giacomo',
+  'Giosuè',
+  'Giuseppe',
+  'Gufino',
+  'Jim',
+  'Jimbo',
+  'Kim',
+  'Mario',
+  'Marvin'];
+
+const femaleNames = ['Lara',
+  'Lucia',
+  'Margaret',
+  'Maria',
+  'Marianna',
+  'Matilde',
+  'Mia',
+  'Micol',
+  'Milena',
+  'Sandra'];
+
 module.exports = {
   characterEntityToCharacter: (characterEntity) => {
     return character[characterEntity];
   },
+  
+  shuffle: (array) => {
+    return array.sort(() => { return Math.random() - 0.5 });
+  },
 
+  getNamesSentence: () => {
+    const maleNamesShuffle = module.exports.shuffle(maleNames);
+    const femaleNamesShuffle = module.exports.shuffle(femaleNames);
+
+    return maleNamesShuffle[0] + ', ' + femaleNamesShuffle[0] + ', ' + maleNamesShuffle[1] + ' e ' +femaleNamesShuffle[1];
+
+  },
   userPromptsIndexArrayToUserPromptsArray: (userArray, promptsArray) => {
     let returnArray = [];
     userArray.forEach(element => {
@@ -40,25 +73,25 @@ module.exports = {
   },
   // Utility to get a random item from an array.
   getRandomItem: (array) => {
-    
-    return  array[Math.floor(Math.random() * (array.length))];
+
+    return array[Math.floor(Math.random() * (array.length))];
   },
 
   // Utility to get a random prompt without sequential repeats.
   getRandomPrompt: (conv, prompt) => {
     let functionPrompts = prompts;
 
-    if(conv.user.storage.prompts === undefined){
+    if (conv.user.storage.prompts === undefined) {
       conv.user.storage.prompts = {};
     }
     let userSession = conv.user.storage.prompts;
-    
+
     let character = conv.data.character;
-    
+
     // logger.debug(`getRandomPrompt=${prompt}`);
     if (character !== undefined && prompt !== 'story_final') {
       functionPrompts = functionPrompts[character];
-      if(conv.user.storage.prompts[character] === undefined){
+      if (conv.user.storage.prompts[character] === undefined) {
         conv.user.storage.prompts[character] = {};
       }
       userSession = conv.user.storage.prompts[character];
@@ -93,7 +126,7 @@ module.exports = {
           userSession[prompt] = [index];
         }
       }
-    } 
+    }
 
     const returnObject = {};
 
@@ -103,7 +136,7 @@ module.exports = {
 
     returnObject['finalConversation'] = false;
 
-    if(functionPrompts[prompt].finalConversation) {
+    if (functionPrompts[prompt].finalConversation) {
       returnObject['finalConversation'] = true;
     }
 
