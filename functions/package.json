@@ -20,7 +20,7 @@
     "firebase-functions": "^3.24.1"
   },
   "devDependencies": {
-    "eslint": "^4.19.0",
+    "eslint": "^8.31.0",
     "eslint-config-google": "^0.9.1",
     "firebase-functions-test": "^0.1.6"
   }
